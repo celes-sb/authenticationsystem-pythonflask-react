@@ -1,25 +1,36 @@
 export const favoritosStore = {
-    favoritos: [], // [{name:"Luke", uid:1, categoria:"people", link:"/people/1"},{}]
+    favoritos: JSON.parse(localStorage.getItem("favoritos") || "[]")
+};
 
-}
 
 export function favoritosActions(getStore, getActions, setStore) {
+    const handleDelete = (index) => {
+        let store = getStore();
+        let arrTemp = store.favoritos.slice(); //copio estado centralizado
+        arrTemp.splice(index, 1);
+        setStore({ ...store, favoritos: arrTemp });
+    }
+
     return {
         agregarFavorito: async (objeto) => {
-            let store = getStore()
-            let arrTemp = store.favoritos.slice() //copio el estado centralizado
+            let store = getStore();
+            let arrTemp = store.favoritos.slice(); //copio estado centralizado
 
             if (arrTemp.length > 0) {
                 for (let i = 0; i < arrTemp.length; i++) {
                     if (arrTemp[i]["name"] == objeto.name) {
-                        return //saldría de la función aquí
+                        return; //sale de la función
                     }
                 }
             }
+            arrTemp.push(objeto);
+            setStore({ ...store, favoritos: arrTemp }); //[...favoritos, objeto]
 
-            arrTemp.push(objeto)
-            setStore({ ...store, favoritos: arrTemp }) // [..favoritos, objeto]
+            // update local storage
+            localStorage.setItem("favoritos", JSON.stringify(arrTemp));
             return true;
         },
+
+        handleDelete: handleDelete,
     }
 }

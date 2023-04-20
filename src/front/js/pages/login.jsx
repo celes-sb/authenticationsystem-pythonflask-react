@@ -10,8 +10,8 @@ const Login = () => {
     useEffect(() => { console.log(password) }, [password])
 
     return (<>
-        <div className="container-fluid bg bg-dark">
-            <div className="contactForm container bg bg-white">
+        <div className="container-fluid">
+            <div className="contactForm container border mt-5 pb-5">
                 <div className="d-flex justify-content-center">
                     <h1 className="fs-1 fw-bold mt-5">Login</h1>
                 </div>
@@ -23,7 +23,7 @@ const Login = () => {
                         <input
                             type="text"
                             className="form-control mb-3"
-                            placeholder="Enter Full Name"
+                            placeholder="Enter email"
                             onChange={(e) => {
                                 setEmail(e.target.value)
                             }}
@@ -40,7 +40,7 @@ const Login = () => {
                         <div className="d-flex justify-content-center">
                             <button
                                 type="button"
-                                className="button-save col-md-6 btn btn-primary fs-6 fw-bold"
+                                className="button-save col-md-2 btn btn-success fs-6 mt-3"
                                 onClick={(e) => {
                                     actions.login(email, password)
                                 }}

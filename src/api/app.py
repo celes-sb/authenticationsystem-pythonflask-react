@@ -227,16 +227,16 @@ def edit_people():
 
 @app.route('/get-planet/<int:id>', methods=['GET'])
 def get_specific_planet(id):
-    planet = Planet.query.get(id)
+    planets = Planets.query.get(id)
     
-    return jsonify(planet.serialize()), 200
+    return jsonify(planets.serialize()), 200
 
 @app.route('/get-planet', methods=['POST'])
 def get_specific_planet2():
     body = request.get_json()
     id = body['id']
     
-    planet = Planet.query.get(id)
+    planets = Planets.query.get(id)
 
     return jsonify(planet.serialize()), 200 
 
@@ -245,7 +245,7 @@ def delete_specific_planet():
     body = request.get_json()
     id = body['id']
     
-    planet = Planet.query.get(id)
+    planets = Planets.query.get(id)
 
     db.session.delete(planet)
     db.session.commit
@@ -258,38 +258,38 @@ def edit_planet():
     id = body['id']
     name = body["name"]
 
-    planet = Planet.query.get(id)
-    planet.name = name
+    planets = Planets.query.get(id)
+    planets.name = name
     
     db.session.commit()
 
-    return jsonify(planet.serialize()), 200 
+    return jsonify(planets.serialize()), 200 
 
 #APIS DE VEHICLE --------------------------------------------
 
 @app.route('/get-vehicle/<int:id>', methods=['GET'])
 def get_specific_vehicle(id):
-    vehicle = Vehicle.query.get(id)
+    vehicles = Vehicles.query.get(id)
     
-    return jsonify(vehicle.serialize()), 200
+    return jsonify(vehicles.serialize()), 200
 
 @app.route('/post-vehicle', methods=['POST'])
 def get_specific_vehicle2():
     body = request.get_json()
     id = body['id']
     
-    vehicle = Vehicle.query.get(id)
+    vehicles = Vehicles.query.get(id)
 
-    return jsonify(vehicle.serialize()), 200 
+    return jsonify(vehicles.serialize()), 200 
 
 @app.route('/delete-vehicle', methods=['DELETE'])
 def delete_specific_vehicle():
     body = request.get_json()
     id = body['id']
     
-    vehicle = Vehicle.query.get(id)
+    vehicles = Vehicles.query.get(id)
 
-    db.session.delete(vehicle)
+    db.session.delete(vehicles)
     db.session.commit
 
     return jsonify("Vehicle successfully deleted!"), 200 
@@ -300,12 +300,12 @@ def edit_vehicle():
     id = body['id']
     name = body["name"]
 
-    vehicle = Vehicle.query.get(id)
-    vehicle.name = name
+    vehicles = Vehicles.query.get(id)
+    vehicles.name = name
     
     db.session.commit()
 
-    return jsonify(vehicle.serialize()), 200 
+    return jsonify(vehicles.serialize()), 200 
 
 #APIS FAVORITES PEOPLE --------------------------------------------
 @app.route('/add-favorite/people', methods=['POST'])
@@ -341,24 +341,24 @@ def add_favorite_planet():
     user_id = body['user_id']
     planet_id = body['planet_id']
 
-    planet = Planet.query.get(planet_id) #cuando encuentra el primero, detiene la busqueda => .first()
-    if not planet: #validacion de errores, obligatorio
+    planets = Planets.query.get(planet_id) #cuando encuentra el primero, detiene la busqueda => .first()
+    if not planets: #validacion de errores, obligatorio
         raise APIException('Planet not found', status_code=404)
     
     user = User.query.get(user_id)
     if not user:
         raise APIException('User not found', status_code=404)
 
-    favoriteplanet_exist = FavoritePlanet.query.filter_by(user_id = user.id, planet_id = planet.id).first() is not None
+    favoriteplanet_exist = FavoritePlanet.query.filter_by(user_id = user.id, planet_id = planets.id).first() is not None
     
     if favoriteplanet_exist:
         raise APIException('Favorite planet already exists in user account', status_code=404)
 
-    favorite_planet = FavoritePlanet(user_id = user.id, planet_id = planet.id)
-    db.session.add(favorite_planet)
+    favorite_planets = FavoritePlanet(user_id = user.id, planet_id = planets.id)
+    db.session.add(favorite_planets)
     db.session.commit()
 
-    return jsonify(favorite_planet.serialize()), 201
+    return jsonify(favorite_planets.serialize()), 201
 
 #APIS FAVORITES VEHICLE --------------------------------------------
 
@@ -368,24 +368,24 @@ def add_favorite_vehicle():
     user_id = body['user_id']
     vehicle_id = body['vehicle_id']
 
-    vehicle = Vehicle.query.get(vehicle_id) #cuando encuentra el primero, detiene la busqueda => .first()
-    if not vehicle: #validacion de errores, obligatorio
+    vehicles = Vehicles.query.get(vehicle_id) #cuando encuentra el primero, detiene la busqueda => .first()
+    if not vehicles: #validacion de errores, obligatorio
         raise APIException('Vehicle not found', status_code=404)
     
     user = User.query.get(user_id)
     if not user:
         raise APIException('User not found', status_code=404)
 
-    favoritevehicle_exist = FavoriteVehicle.query.filter_by(user_id = user.id, vehicle_id = vehicle.id).first() is not None
+    favoritevehicle_exist = FavoriteVehicle.query.filter_by(user_id = user.id, vehicle_id = vehicles.id).first() is not None
     
     if favoritevehicle_exist:
         raise APIException('Favorite vehicle already exists in user account', status_code=404)
 
-    favorite_vehicle = FavoriteVehicle(user_id = user.id, vehicle_id = vehicle.id)
-    db.session.add(favorite_vehicle)
+    favorite_vehicles = FavoriteVehicle(user_id = user.id, vehicle_id = vehicles.id)
+    db.session.add(favorite_vehicles)
     db.session.commit()
 
-    return jsonify(favorite_vehicle.serialize()), 201
+    return jsonify(favorite_vehicles.serialize()), 201
 
 #APIS FAVORITES ALL --------------------------------------------
 
@@ -408,10 +408,10 @@ def list_favorites():
     user_favorites_planets = FavoritePlanet.query.filter_by(user_id = user.id).all()
     user_favorites_final_planets = list(map(lambda item: item.serialize(), user_favorites_planets))
 
-    user_favorites_vehicle = FavoriteVehicle.query.filter_by(user_id = user.id).all()
-    user_favorites_final_vehicle = list(map(lambda item: item.serialize(), user_favorites_vehicle))
+    user_favorites_vehicles = FavoriteVehicle.query.filter_by(user_id = user.id).all()
+    user_favorites_final_vehicles = list(map(lambda item: item.serialize(), user_favorites_vehicles))
     
-    user_favorites_final = user_favorites_final + user_favorites_final_planets + user_favorites_final_vehicle
+    user_favorites_final = user_favorites_final + user_favorites_final_planets + user_favorites_final_vehicles
 
     return jsonify(user_favorites_final), 201
 

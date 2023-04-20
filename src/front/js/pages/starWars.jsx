@@ -2,16 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import CardPeople from "../component/cardPeople.jsx";
-import CardPlanet from "../component/cardPlanet.jsx";
-import CardVehicle from "../component/cardVehicle.jsx";
-import { todoActions } from "../store/todos";
-//React parallax
+import CardPlanets from "../component/cardPlanets.jsx";
+import CardVehicles from "../component/cardVehicles.jsx";
 
 const StarWars = () => {
     const { store, actions } = useContext(Context)
     const [listPeople, setListPeople] = useState({})
-    const [listVehicle, setListVehicle] = useState({})
     const [listPlanet, setListPlanet] = useState({})
+    const [listVehicle, setListVehicle] = useState({})
 
     //se ejecuta la primera vez que se reenderiza el componente
     useEffect(() => {
@@ -27,100 +25,103 @@ const StarWars = () => {
                 console.log(respuestaJson)
                 setListPlanet(respuestaJson.results)
             }
+
             ({ respuestaJson, response } = await actions.useFetch("/vehicles"))
             if (response.ok) {
                 console.log(respuestaJson)
                 setListVehicle(respuestaJson.results)
             }
-
-            /* ({ respuestaJson, response } = await actions.useFetch("/login"))
-            if (response.ok) {
-                console.log(respuestaJson)
-                setListVehicle(respuestaJson.results)
-            }
-            if (respuestaJson.login == true) {
-                ({ respuestaJson, response } = await actions.useFetch("/saldo-de-la-cuenta"))
-                if (response.ok) {
-                    console.log(respuestaJson)
-                    setListVehicle(respuestaJson.results)
-                }
-            } */
-
         }
-        //cargaDatos() //login, //consultar saldo 
+        //cargaDatos()
 
         const cargaParalelo = async () => {
-            let promesaPlanetas = actions.useFetchParalelo("/planets") //chequear si va en sing o plural!!
             let promesaPeople = actions.useFetchParalelo("/people")
-            let promesaVehicles = actions.useFetchParalelo("/vehicles") //chequear si va en sing o plural!!
-
+            let promesaPlanet = actions.useFetchParalelo("/planets")
+            let promesaVehicle = actions.useFetchParalelo("/vehicles")
             //resuelvo las tres promesas al mismo tiempo
-            let [a, b, c] = await Promise.all([promesaPlanetas, promesaPeople, promesaVehicles])
+            let [a, b, c] = await Promise.all([promesaPeople, promesaPlanet, promesaVehicle])
 
             a = await a.json()
-            setListPlanet(a.results)
+            setListPeople(a.results)
 
             b = await b.json()
-            setListPeople(b.results)
+            setListPlanet(b.results)
 
             c = await c.json()
             setListVehicle(c.results)
         }
-        cargaParalelo() //paralelo //saldo en la cuenta, transferencia efectiva, etc
+        cargaParalelo()
 
-    }, [])
+    }, []);
 
     useEffect(() => { }, [listPeople])
     useEffect(() => { }, [listPlanet])
     useEffect(() => { }, [listVehicle])
 
-    return (<>
-        Soy el componente de Star wars
-
-
-        <div>
-            <h1 className="text-danger">Characters</h1>
-            <ul>
-                {listPeople && listPeople.length > 0 ?
-                    <>
-                        {listPeople.map((item, index) => {
-                            return <li key={item.uid}>
-                                <CardPeople name={item.name} uid={item.uid} />
-                            </li>
-                        })}
-                    </> : <></>}
-            </ul>
-        </div>
-        <br />
-        <div>
-            <h1 className="text-danger">Planets</h1>
-            <ul>
-                {listPlanet && listPlanet.length > 0 ?
-                    <>
-                        {listPlanet.map((item, index) => {
-                            return <li key={item.uid}>
-                                <CardPlanet name={item.name} uid={item.uid} />
-                            </li>
-                        })}
-                    </> : <></>}
-            </ul>
-        </div>
-        <br />
-        <div>
-            <h1 className="text-danger">Vehicles</h1>
-            <ul>
-                {listVehicle && listVehicle.length > 0 ?
-                    <>
-                        {listVehicle.map((item, index) => {
-                            return <li key={item.uid}>
-                                <CardVehicle name={item.name} uid={item.uid} />
-                            </li>
-                        })}
-                    </> : <></>}
-            </ul>
-        </div>
-
-    </>)
+    return (
+        <>
+            <div className="section">
+                <h1 className="text-danger" style={{ fontFamily: "monospace" }}>Characters</h1>
+                <div className="card-container">
+                    {listPeople && listPeople.length > 0 ? (
+                        <div className="card-scroll">
+                            {listPeople.map((item, index) => {
+                                return (
+                                    <CardPeople
+                                        key={item.uid}
+                                        name={item.name}
+                                        uid={item.uid}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            </div>
+            <div className="section">
+                <h1 className="text-danger" style={{ fontFamily: "monospace" }}>Planets</h1>
+                <div className="card-container">
+                    {listPlanet && listPlanet.length > 0 ? (
+                        <div className="card-scroll">
+                            {listPlanet.map((item, index) => {
+                                return (
+                                    <CardPlanets
+                                        key={item.uid}
+                                        name={item.name}
+                                        uid={item.uid}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            </div>
+            <div className="section">
+                <h1 className="text-danger" style={{ fontFamily: "monospace" }}>Vehicles</h1>
+                <div className="card-container">
+                    {listVehicle && listVehicle.length > 0 ? (
+                        <div className="card-scroll">
+                            {listVehicle.map((item, index) => {
+                                return (
+                                    <CardVehicles
+                                        key={item.uid}
+                                        name={item.name}
+                                        uid={item.uid}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            </div>
+        </>
+    );
 }
 
-export default StarWars
+export default StarWars;
