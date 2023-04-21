@@ -27,6 +27,14 @@ export const Navbar = () => {
 						<button className="btn btn-warning rounded-pill me-5" type="button">Info</button>
 					</Link>
 					: <></>}
+				<Link to="/register">
+					<button className="btn btn-warning rounded-pill me-5" type="button">Register</button>
+				</Link>
+				{store.userLogin ?
+					<Link to="/info">
+						<button className="btn btn-warning rounded-pill me-5" type="button">Info</button>
+					</Link>
+					: <></>}
 				<div>
 					<div className="nav-item dropdown me-5">
 						<div className="dropdown">

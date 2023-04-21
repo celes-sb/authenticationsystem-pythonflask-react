@@ -16,6 +16,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 
 import Login from "./pages/login.jsx";
+import Register from "./pages/register.jsx";
 import Info from "./pages/informacion.jsx";
 
 //create your first component
@@ -31,6 +32,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Login />} path="/login" />
+                        <Route element={<Register />} path="/register" />
                         <Route element={<StarWars />} path="/" />
                         <Route element={<Info />} path="/info" />
                         <Route element={<Demo />} path="/demo" />

@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 
-const Login = () => {
+const Register = () => {
     const { store, actions } = useContext(Context);
+    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -20,10 +22,30 @@ const Login = () => {
             <div className="container-fluid">
                 <div className="contactForm container border mt-5 pb-5">
                     <div className="d-flex justify-content-center">
-                        <h1 className="fs-1 fw-bold mt-5">Login</h1>
+                        <h1 className="fs-1 fw-bold mt-5">Register</h1>
                     </div>
                     <div className="form-control border border-0 ps-4 pe-4">
                         <form>
+                            <label htmlFor="name" className="form-label fs-5">
+                                Name
+                            </label>
+                            <input
+                                className="form-control mb-3"
+                                type="text"
+                                id="name"
+                                placeholder="Enter name"
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <label htmlFor="name" className="form-label fs-5">
+                                Username
+                            </label>
+                            <input
+                                className="form-control mb-3"
+                                type="text"
+                                id="username"
+                                placeholder="Enter username"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
                             <label htmlFor="email" className="form-label fs-5">
                                 Email
                             </label>
@@ -48,7 +70,7 @@ const Login = () => {
                                     className="button-save col-md-2 btn btn-success fs-6 mt-3"
                                     onClick={handleLogin}
                                 >
-                                    Login
+                                    Register
                                 </button>
                             </div>
                         </form>
@@ -58,4 +80,4 @@ const Login = () => {
         </>)
 }
 
-export default Login;
+export default Register;
