@@ -11,8 +11,8 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     name = db.Column(db.String(120), unique=False, nullable=False)
     favorite_people = db.relationship('FavoritePeople', backref = 'user', lazy=True)
-    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'user', lazy=True)
-    favorite_planet = db.relationship('FavoritePlanet', backref = 'user', lazy=True)
+    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'vehicles', lazy=True)
+    favorite_planet = db.relationship('FavoritePlanet', backref = 'planets', lazy=True)
     
     #cambia la ubicacion de la memoria
     def __repr__(self):
@@ -71,7 +71,7 @@ class FavoritePeople(db.Model):
 # new_favorite = FavoritePeople(user_id = db.Column....., )
 # new_favorite.user -> obtengo toda la info del usuario q tiene a ese favorito en su lista y tmb obtengo sus metodos (serialize)
 
-class Vehicle(db.Model):
+class Vehicles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), unique=True, nullable=False)
     model = db.Column(db.String(50), unique=False, nullable=False)
@@ -80,7 +80,7 @@ class Vehicle(db.Model):
     length = db.Column(db.Integer, unique=False, nullable=False)
     crew = db.Column(db.Integer, unique=False, nullable=False)
     passengers = db.Column(db.Integer, unique=False, nullable=False)
-    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'vehicle', lazy=True)
+    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'vehicles', lazy=True)
 
     def serialize(self):
         return {
@@ -98,16 +98,16 @@ class Vehicle(db.Model):
 class FavoriteVehicle(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=False)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicles.id'), nullable=False)
 
     def serialize(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "vehicle": Vehicle.query.get(self.vehicle_id).serialize()
+            "vehicles": Vehicles.query.get(self.vehicle_id).serialize()
         }
 
-class Planet(db.Model):
+class Planets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     diameter = db.Column(db.Integer, unique=False, nullable=False)
@@ -118,7 +118,7 @@ class Planet(db.Model):
     climate = db.Column(db.String(50), unique=False, nullable=False)
     terrain = db.Column(db.String(50), unique=False, nullable=False)
     surface_water = db.Column(db.String(50), unique=False, nullable=False)
-    favorite_planet = db.relationship('FavoritePlanet', backref = 'planet', lazy=True)
+    favorite_planet = db.relationship('FavoritePlanet', backref = 'planets', lazy=True)
 
     def serialize(self):
         return {
@@ -138,14 +138,14 @@ class Planet(db.Model):
 class FavoritePlanet(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    planet_id = db.Column(db.Integer, db.ForeignKey('planet.id'), nullable=False)
+    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'), nullable=False)
 
     def serialize(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
             "user": User.query.get(self.user_id).serialize(),
-            "planet": Planet.query.get(self.planet_id).serialize()
+            "planets": Planets.query.get(self.planet_id).serialize()
         }
 
 class TokenBlockedList(db.Model):

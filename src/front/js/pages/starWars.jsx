@@ -11,7 +11,6 @@ const StarWars = () => {
     const [listPlanet, setListPlanet] = useState({})
     const [listVehicle, setListVehicle] = useState({})
 
-    //se ejecuta la primera vez que se reenderiza el componente
     useEffect(() => {
         const cargaDatos = async () => {
             let { respuestaJson, response } = await actions.useFetch("/people")
@@ -38,7 +37,6 @@ const StarWars = () => {
             let promesaPeople = actions.useFetchParalelo("/people")
             let promesaPlanet = actions.useFetchParalelo("/planets")
             let promesaVehicle = actions.useFetchParalelo("/vehicles")
-            //resuelvo las tres promesas al mismo tiempo
             let [a, b, c] = await Promise.all([promesaPeople, promesaPlanet, promesaVehicle])
 
             a = await a.json()
@@ -68,10 +66,12 @@ const StarWars = () => {
                             {listPeople.map((item, index) => {
                                 return (
                                     <CardPeople
-                                        key={item.uid}
+                                        key={index}
                                         name={item.name}
                                         uid={item.uid}
+                                        height={item.height}
                                     />
+
                                 );
                             })}
                         </div>
@@ -118,6 +118,43 @@ const StarWars = () => {
                     ) : (
                         <></>
                     )}
+                </div>
+            </div>
+            <div className="section">
+                <h1 className="text-danger" style={{ fontFamily: "monospace" }}>Read Later</h1>
+                <div className="card-container ms-1 me-3">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col-2" style={{ fontFamily: "monospace" }}>Name</th>
+                                <th scope="col-2" style={{ fontFamily: "monospace" }}>Link</th>
+                                <th scope="col-2" style={{ fontFamily: "monospace" }}>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {store.readLater && store.readLater.length > 0 ? (
+                                <>
+                                    {store.readLater.map((item, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{item.name}</td>
+                                                <td>
+                                                    <a href={item.link} target="_blank" rel="noopener noreferrer">{item.link}</a>
+                                                </td>
+                                                <td>
+                                                    <i className="fas fa-trash-alt text-danger h6 p-1" onClick={() => actions.handleDelete(index)} style={{ cursor: 'pointer' }}></i>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <tr>
+                                    <td colSpan="3" style={{ fontFamily: "monospace" }}>No items added to Read Later list</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>

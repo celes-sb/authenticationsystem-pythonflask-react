@@ -2,6 +2,7 @@ import { exampleStore, exampleActions } from "./exampleStore.js"; //destructured
 import { usuarioStore, usuarioActions } from "./usuario.js";
 import { todoStore, todoActions } from "./todos.js";
 import { favoritosStore, favoritosActions } from "./favoritos.js";
+import { readLaterStore, readLaterActions } from "./readlater.js";
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -23,24 +24,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			...usuarioStore,
 			...todoStore,
 			...favoritosStore,
+			...readLaterStore,
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
-			},
-			getMessage: async () => {
-				try {
-					// fetching data from the backend
-					const store = getStore()
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ ...store, message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.log("Error loading message from backend", error)
-				}
 			},
 			changeColor: (index, color) => {
 				//get the store
@@ -54,26 +43,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 
 				//reset the global store
-				setStore({ ...store, demo: demo });
+				//setStore({ demo: demo });
+
+				//reset state demo only
+				setStore({ ...store, demo: demo })
 			},
 			...exampleActions(getStore, getActions, setStore), //this will brings here the function exampleFunction, and it will be able to use store's states and actions
 			...usuarioActions(getStore, getActions, setStore),
 			...todoActions(getStore, getActions, setStore),
 			...favoritosActions(getStore, getActions, setStore),
+			...readLaterActions(getStore, getActions, setStore),
 			useFetch: async (endpoint, body, method = "GET") => {
 				let url = process.env.BACKEND_URL + endpoint
 				console.log(url)
 				let response = await fetch(url, {
 					method: method,
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": "Bearer " + localStorage.getItem("token")
-					},
+					headers: { "Content-Type": "application/json" },
 					body: body ? JSON.stringify(body) : null
 				})
 
 				let respuestaJson = await response.json()
-
 				return { respuestaJson, response }
 
 			},
@@ -86,8 +75,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: body ? JSON.stringify(body) : null
 				})
 
-				return response;
-			},
+				return response
+
+			}
 		}
 	};
 };

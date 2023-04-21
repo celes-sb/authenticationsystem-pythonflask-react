@@ -16,7 +16,7 @@ from flask_bcrypt import Bcrypt #librería para encriptaciones
 
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
-from api.models import db, User, People, Planet, Vehicle, FavoritePeople, FavoritePlanet, FavoriteVehicle, TokenBlockedList
+from api.models import db, User, People, Planets, Vehicles, FavoritePeople, FavoritePlanet, FavoriteVehicle, TokenBlockedList
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -225,35 +225,35 @@ def edit_people():
 
 #APIS DE PLANET --------------------------------------------
 
-@app.route('/get-planet/<int:id>', methods=['GET'])
-def get_specific_planet(id):
+@app.route('/get-planets/<int:id>', methods=['GET'])
+def get_specific_planets(id):
     planets = Planets.query.get(id)
     
     return jsonify(planets.serialize()), 200
 
-@app.route('/get-planet', methods=['POST'])
-def get_specific_planet2():
+@app.route('/get-planets', methods=['POST'])
+def get_specific_planets2():
     body = request.get_json()
     id = body['id']
     
     planets = Planets.query.get(id)
 
-    return jsonify(planet.serialize()), 200 
+    return jsonify(planets.serialize()), 200 
 
-@app.route('/delete-planet', methods=['DELETE'])
-def delete_specific_planet():
+@app.route('/delete-planets', methods=['DELETE'])
+def delete_specific_planets():
     body = request.get_json()
     id = body['id']
     
     planets = Planets.query.get(id)
 
-    db.session.delete(planet)
+    db.session.delete(planets)
     db.session.commit
 
     return jsonify("Planet successfully deleted!"), 200 
 
-@app.route('/edit-planet', methods=['PUT'])
-def edit_planet():
+@app.route('/edit-planets', methods=['PUT'])
+def edit_planets():
     body = request.get_json()
     id = body['id']
     name = body["name"]
@@ -265,16 +265,16 @@ def edit_planet():
 
     return jsonify(planets.serialize()), 200 
 
-#APIS DE VEHICLE --------------------------------------------
+#APIS DE VEHICLES --------------------------------------------
 
-@app.route('/get-vehicle/<int:id>', methods=['GET'])
-def get_specific_vehicle(id):
+@app.route('/get-vehicles/<int:id>', methods=['GET'])
+def get_specific_vehicles(id):
     vehicles = Vehicles.query.get(id)
     
     return jsonify(vehicles.serialize()), 200
 
-@app.route('/post-vehicle', methods=['POST'])
-def get_specific_vehicle2():
+@app.route('/post-vehicles', methods=['POST'])
+def get_specific_vehicles2():
     body = request.get_json()
     id = body['id']
     
@@ -282,8 +282,8 @@ def get_specific_vehicle2():
 
     return jsonify(vehicles.serialize()), 200 
 
-@app.route('/delete-vehicle', methods=['DELETE'])
-def delete_specific_vehicle():
+@app.route('/delete-vehicles', methods=['DELETE'])
+def delete_specific_vehicles():
     body = request.get_json()
     id = body['id']
     
@@ -294,8 +294,8 @@ def delete_specific_vehicle():
 
     return jsonify("Vehicle successfully deleted!"), 200 
 
-@app.route('/put-vehicle', methods=['PUT'])
-def edit_vehicle():
+@app.route('/put-vehicles', methods=['PUT'])
+def edit_vehicles():
     body = request.get_json()
     id = body['id']
     name = body["name"]
@@ -333,10 +333,10 @@ def add_favorite_people():
 
     return jsonify(favorite_people.serialize()), 201
 
-#APIS FAVORITES PLANET --------------------------------------------
+#APIS FAVORITES PLANETS --------------------------------------------
 
-@app.route('/add-favorite/planet', methods=['POST'])
-def add_favorite_planet():
+@app.route('/add-favorite/planets', methods=['POST'])
+def add_favorite_planets():
     body = request.get_json()
     user_id = body['user_id']
     planet_id = body['planet_id']
@@ -360,10 +360,10 @@ def add_favorite_planet():
 
     return jsonify(favorite_planets.serialize()), 201
 
-#APIS FAVORITES VEHICLE --------------------------------------------
+#APIS FAVORITES VEHICLES --------------------------------------------
 
-@app.route('/add-favorite/vehicle', methods=['POST'])
-def add_favorite_vehicle():
+@app.route('/add-favorite/vehicles', methods=['POST'])
+def add_favorite_vehicles():
     body = request.get_json()
     user_id = body['user_id']
     vehicle_id = body['vehicle_id']
