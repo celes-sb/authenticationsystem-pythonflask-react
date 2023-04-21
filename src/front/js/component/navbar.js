@@ -19,6 +19,14 @@ export const Navbar = () => {
 				<Link to="/">
 					<img className="img-responsive h-25 w-25" src="https://lumiere-a.akamaihd.net/v1/images/sw_logo_stacked_2x-52b4f6d33087_7ef430af.png?region=0,0,586,254" />
 				</Link>
+				<Link to="/login">
+					<button className="btn btn-warning rounded-pill me-5" type="button">Login</button>
+				</Link>
+				{store.userLogin ?
+					<Link to="/info">
+						<button className="btn btn-warning rounded-pill me-5" type="button">Info</button>
+					</Link>
+					: <></>}
 				<div>
 					<div className="nav-item dropdown me-5">
 						<div className="dropdown">
@@ -46,7 +54,23 @@ export const Navbar = () => {
 						</div>
 					</div>
 				</div>
+				<div className="ml-auto">
+					<Link to="/demo">
+						<button className="btn btn-sm btn-secondary rounded-pill me-5" type="button">Check the Context in action</button>
+					</Link>
+				</div>
 			</div>
 		</nav >
 	);
 };
+
+
+/*</div>[{},{},{
+	label:"",
+	done:false
+} ] 
+[{},{},{
+	name:"",
+	uid:1,
+	categoy:"people"
+} ] */

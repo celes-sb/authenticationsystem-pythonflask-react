@@ -11,8 +11,8 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     name = db.Column(db.String(120), unique=False, nullable=False)
     favorite_people = db.relationship('FavoritePeople', backref = 'user', lazy=True)
-    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'vehicles', lazy=True)
-    favorite_planet = db.relationship('FavoritePlanet', backref = 'planets', lazy=True)
+    favorite_vehicle = db.relationship('FavoriteVehicle', backref = 'user', lazy=True)
+    favorite_planet = db.relationship('FavoritePlanet', backref = 'user', lazy=True)
     
     #cambia la ubicacion de la memoria
     def __repr__(self):
@@ -104,7 +104,7 @@ class FavoriteVehicle(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "vehicles": Vehicles.query.get(self.vehicle_id).serialize()
+            "vehicle": Vehicle.query.get(self.vehicle_id).serialize()
         }
 
 class Planets(db.Model):
@@ -145,7 +145,7 @@ class FavoritePlanet(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "user": User.query.get(self.user_id).serialize(),
-            "planets": Planets.query.get(self.planet_id).serialize()
+            "planet": Planet.query.get(self.planet_id).serialize()
         }
 
 class TokenBlockedList(db.Model):
