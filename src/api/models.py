@@ -5,6 +5,7 @@ db = SQLAlchemy()
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     #nullable=False significa que no se puede dejar en blanco
     #unique=True, que no se puede repetir
     password = db.Column(db.String(250), unique=False, nullable=False)
@@ -21,6 +22,7 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "username": self.username,
             "email": self.email,
             "name": self.name
             # do not serialize the password, its a security breach

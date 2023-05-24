@@ -17,3 +17,18 @@
   overflow-x: auto;
   width: 3000px;
 }
+
+.login {
+  min-height: 100%;
+  margin-bottom: 105px;
+}
+
+.divPrivate {
+  min-height: 100vh;
+  margin-bottom: 0px;
+  margin-top: 150px;
+}
+
+.homeContainer {
+  min-height: 100vh;
+}

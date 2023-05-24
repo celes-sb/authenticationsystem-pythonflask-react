@@ -7,11 +7,13 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isRegistered, setIsRegistered] = useState(false);
 
-    const handleLogin = async () => {
+    const handleSignup = async () => {
         try {
-            const response = await actions.login(email, password);
+            const response = await actions.signup(name, email, username, password);
             console.log(response);
+            setIsRegistered(true);
         } catch (error) {
             console.log(error);
         }
@@ -67,10 +69,11 @@ const Register = () => {
                             <div className="d-flex justify-content-center">
                                 <button
                                     type="button"
-                                    className="button-save col-md-2 btn btn-success fs-6 mt-3"
-                                    onClick={handleLogin}
+                                    className={`button-save col-md-2 btn ${isRegistered ? "btn-warning" : "btn-success"} fs-6 mt-3`}
+                                    onClick={handleSignup}
+                                    disabled={isRegistered}
                                 >
-                                    Register
+                                    {isRegistered ? "Register Successful!" : "Register"}
                                 </button>
                             </div>
                         </form>

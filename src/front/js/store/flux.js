@@ -3,10 +3,12 @@ import { usuarioStore, usuarioActions } from "./usuario.js";
 import { todoStore, todoActions } from "./todos.js";
 import { favoritosStore, favoritosActions } from "./favoritos.js";
 import { readLaterStore, readLaterActions } from "./readlater.js";
+import { getToken, setToken, removeToken } from "./tokenManager.js";
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			token: getToken() || null,
 			message: null,
 			demo: [
 				{
@@ -58,10 +60,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(url)
 				let response = await fetch(url, {
 					method: method,
-					headers: { "Content-Type": "application/json" },
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + localStorage.getItem("token")
+					},
 					body: body ? JSON.stringify(body) : null
 				})
-
+				//spasar token en headers
 				let respuestaJson = await response.json()
 				return { respuestaJson, response }
 
@@ -71,13 +76,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(url)
 				let response = fetch(url, {
 					method: method,
-					headers: { "Content-Type": "application/json" },
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + localStorage.getItem("token")
+					},
 					body: body ? JSON.stringify(body) : null
 				})
 
 				return response
 
-			}
+			},
+			useFetch: async (endpoint, body = "", method = "GET") => {
+				let url = "https://www.swapi.tech/api" + endpoint;
+				console.log(url);
+				let response = await fetch(url, {
+					method: method,
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + localStorage.getItem("token"),
+					},
+					body: body ? JSON.stringify(body) : null,
+				});
+				let respuestaJson = await response.json();
+				return { respuestaJson, response };
+			},
 		}
 	};
 };

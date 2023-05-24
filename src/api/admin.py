@@ -19,3 +19,4 @@ def setup_admin(app):
     admin.add_view(ModelView(FavoritePlanet, db.session))
     admin.add_view(ModelView(FavoriteVehicle, db.session))
     admin.add_view(ModelView(TokenBlockedList, db.session))
+    

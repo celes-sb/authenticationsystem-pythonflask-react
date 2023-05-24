@@ -13,32 +13,31 @@ export const Navbar = () => {
 		setStore({ ...store, favoritos: arrTemp });
 	};
 
+	const handleLogout = () => {
+		actions.logout();
+		alert("Logout successful.")
+	};
+
+
 	return (
 		<nav className="navbar navbar-dark bg-dark">
 			<div className="container-fluid">
 				<Link to="/">
 					<img className="img-responsive h-25 w-25" src="https://lumiere-a.akamaihd.net/v1/images/sw_logo_stacked_2x-52b4f6d33087_7ef430af.png?region=0,0,586,254" />
 				</Link>
-				<Link to="/login">
-					<button className="btn btn-warning rounded-pill me-5" type="button">Login</button>
-				</Link>
-				{store.userLogin ?
-					<Link to="/info">
-						<button className="btn btn-warning rounded-pill me-5" type="button">Info</button>
-					</Link>
-					: <></>}
-				<Link to="/register">
-					<button className="btn btn-warning rounded-pill me-5" type="button">Register</button>
-				</Link>
-				{store.userLogin ?
-					<Link to="/info">
-						<button className="btn btn-warning rounded-pill me-5" type="button">Info</button>
-					</Link>
-					: <></>}
-				<div>
-					<div className="nav-item dropdown me-5">
-						<div className="dropdown">
-							<button className="btn btn-warning dropdown-toggle rounded-pill me-5" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+				{!store.userLogin ?
+					<div>
+						<Link to="/login">
+							<button className="btn btn-warning rounded-pill me-3" type="button">Login</button>
+						</Link>
+						<Link to="/register">
+							<button className="btn btn-warning rounded-pill me-3" type="button">Register</button>
+						</Link>
+					</div>
+					:
+					<div className="d-flex align-items-center">
+						<div className="nav-item dropdown">
+							<button className="btn btn-warning dropdown-toggle rounded-pill" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 								Favorites
 							</button>
 							<ul className="dropdown-menu list-unstyled" style={{ width: '200px' }} aria-labelledby="navbarDropdown">
@@ -60,25 +59,10 @@ export const Navbar = () => {
 								)}
 							</ul>
 						</div>
+						<button className="btn btn-warning rounded-pill btn-danger ms-2" onClick={handleLogout}>Logout</button>
 					</div>
-				</div>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-sm btn-secondary rounded-pill me-5" type="button">Check the Context in action</button>
-					</Link>
-				</div>
+				}
 			</div>
 		</nav >
 	);
 };
-
-
-/*</div>[{},{},{
-	label:"",
-	done:false
-} ] 
-[{},{},{
-	name:"",
-	uid:1,
-	categoy:"people"
-} ] */

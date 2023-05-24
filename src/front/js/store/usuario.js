@@ -1,3 +1,5 @@
+import { getToken, setToken, removeToken } from "./tokenManager.js";
+
 export const usuarioStore = {
     listaUsuarios: [],
     usuario: {
@@ -5,48 +7,62 @@ export const usuarioStore = {
     },
     user: "",
     userLogin: false
-
-}
+};
 
 export function usuarioActions(getStore, getActions, setStore) {
     return {
         login: async (email, password) => {
-            const store = getStore()
-            const actions = getActions()
-            console.log("Es la encargada de hacer login del usuario", email, password)
+            const store = getStore();
+            const actions = getActions();
+            console.log("Es la encargada de hacer login del usuario", email, password);
             let obj = {
                 email: email,
                 password: password
-            }
+            };
 
-            let { respuestaJson, response } = await actions.useFetch("/login", obj, "POST")
-            console.log(response.ok)
-            console.log(respuestaJson)
+            let { respuestaJson, response } = await actions.useFetch("/api/login", obj, "POST");
+            console.log(response.ok);
+            console.log(respuestaJson);
             if (response.ok) {
-                localStorage.setItem("token", respuestaJson.token)
-                sessionStorage.setItem("token", respuestaJson.token)
-                let token = localStorage.getItem("token")
-                setStore({ ...store, userLogin: true })
-                //console.log("token", token)
+                setToken(respuestaJson.token); // Store the token using the token manager
+                actions.setStore({ ...store, userLogin: true }); // Use actions.setStore to update the store
             } else {
-                console.log("login fallido")
-                localStorage.setItem("token", "")
-                sessionStorage.setItem("token", "")
-                setStore({ ...store, userLogin: false })
+                console.log("login fallido");
+                removeToken(); // Remove the token from storage
+                actions.setStore({ ...store, userLogin: false }); // Use actions.setStore to update the store
             }
-
-
-            /* setStore({
-                ...store, usuario: {
-                    msg: "Usuario logueado"
-                }
-            }) */
 
             return store.usuario;
         },
-        userToDo: (nuevoUser) => { //esta función se encargará de cambiar el estado centralizado 'user'
-            const store = getStore()
-            setStore({ ...store, user: nuevoUser })
-        }
-    }
+        signup: async (name, email, username, password) => {
+            const store = getStore();
+            const actions = getActions();
+            console.log("Es la encargada de hacer login del usuario", email, password, name, username);
+            let obj = {
+                name: name,
+                email: email,
+                username: username,
+                password: password
+            };
+
+            let { respuestaJson, response } = await actions.useFetch("/api/signup", obj, "POST");
+            console.log(response.ok);
+            console.log(respuestaJson);
+            if (response.ok) {
+                console.log(respuestaJson);
+            } else {
+                console.log("signup failed");
+            }
+        },
+        logout: () => {
+            const store = getStore();
+            removeToken(); // Remove the token from storage
+            actions.setStore({ ...store, userLogin: false }); // Use actions.setStore to update the store
+        },
+        userToDo: (nuevoUser) => {
+            const store = getStore();
+            actions.setStore({ ...store, user: nuevoUser }); // Use actions.setStore to update the store
+        },
+        setStore: setStore // Include the setStore function in the actions object
+    };
 }

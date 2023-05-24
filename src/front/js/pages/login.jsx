@@ -17,7 +17,7 @@ const Login = () => {
 
     return (
         <>
-            <div className="container-fluid">
+            <div className="login container-fluid">
                 <div className="contactForm container border mt-5 pb-5">
                     <div className="d-flex justify-content-center">
                         <h1 className="fs-1 fw-bold mt-5">Login</h1>
@@ -34,7 +34,9 @@ const Login = () => {
                                 placeholder="Enter email"
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <label htmlFor="password" className="form-label fs-5">Password</label>
+                            <label htmlFor="password" className="form-label fs-5">
+                                Password
+                            </label>
                             <input
                                 type="password"
                                 className="form-control mb-3"
@@ -55,7 +57,8 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </>)
-}
+        </>
+    );
+};
 
 export default Login;
