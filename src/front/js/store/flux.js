@@ -56,20 +56,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			...favoritosActions(getStore, getActions, setStore),
 			...readLaterActions(getStore, getActions, setStore),
 			useFetch: async (endpoint, body, method = "GET") => {
-				let url = process.env.BACKEND_URL + endpoint
-				console.log(url)
+				let url = process.env.BACKEND_URL + endpoint;
+				console.log(url);
 				let response = await fetch(url, {
 					method: method,
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: "Bearer " + localStorage.getItem("token")
+						Authorization: "Bearer " + localStorage.getItem("token"),
 					},
-					body: body ? JSON.stringify(body) : null
-				})
-				//spasar token en headers
-				let respuestaJson = await response.json()
-				return { respuestaJson, response }
-
+					body: body ? JSON.stringify(body) : null,
+				});
+				let respuestaJson = await response.json();
+				return { respuestaJson, response };
 			},
 			useFetchParalelo: (endpoint, body, method = "GET") => {
 				let url = process.env.BACKEND_URL + endpoint
@@ -86,7 +84,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return response
 
 			},
-			useFetch: async (endpoint, body = "", method = "GET") => {
+			useFetchSwapi: async (endpoint, body = "", method = "GET") => {
 				let url = "https://www.swapi.tech/api" + endpoint;
 				console.log(url);
 				let response = await fetch(url, {

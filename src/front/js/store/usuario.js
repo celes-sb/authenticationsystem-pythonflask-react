@@ -56,6 +56,7 @@ export function usuarioActions(getStore, getActions, setStore) {
         },
         logout: () => {
             const store = getStore();
+            const actions = getActions();
             removeToken(); // Remove the token from storage
             actions.setStore({ ...store, userLogin: false }); // Use actions.setStore to update the store
         },

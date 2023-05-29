@@ -13,30 +13,30 @@ const StarWars = () => {
 
     useEffect(() => {
         const cargaDatos = async () => {
-            let { respuestaJson, response } = await actions.useFetch("/people")
+            let { respuestaJson, response } = await actions.useFetchSwapi("/people")
             if (response.ok) {
                 console.log(respuestaJson)
                 setListPeople(respuestaJson.results)
             }
 
-            ({ respuestaJson, response } = await actions.useFetch("/planets"))
+            ({ respuestaJson, response } = await actions.useFetchSwapi("/planets"))
             if (response.ok) {
                 console.log(respuestaJson)
                 setListPlanet(respuestaJson.results)
             }
 
-            ({ respuestaJson, response } = await actions.useFetch("/vehicles"))
+            ({ respuestaJson, response } = await actions.useFetchSwapi("/vehicles"))
             if (response.ok) {
                 console.log(respuestaJson)
                 setListVehicle(respuestaJson.results)
             }
         }
-        //cargaDatos()
-
+        cargaDatos()
+        /*
         const cargaParalelo = async () => {
-            let promesaPeople = actions.useFetchParalelo("/people")
-            let promesaPlanet = actions.useFetchParalelo("/planets")
-            let promesaVehicle = actions.useFetchParalelo("/vehicles")
+            let promesaPeople = actions.useFetchSwapi("/people")
+            let promesaPlanet = actions.useFetchSwapi("/planets")
+            let promesaVehicle = actions.useFetchSwapi("/vehicles")
             let [a, b, c] = await Promise.all([promesaPeople, promesaPlanet, promesaVehicle])
 
             a = await a.json()
@@ -49,7 +49,7 @@ const StarWars = () => {
             setListVehicle(c.results)
         }
         cargaParalelo()
-
+*/
     }, []);
 
     useEffect(() => { }, [listPeople])
